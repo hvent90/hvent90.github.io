@@ -1,1 +1,212 @@
-Hello World
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="google-site-verification" content="kmL2r4zjpwl2ZAUP1Ll6G_Z2QaD3mF0lnDcNJ0nOr1M" />
+    <link rel="icon" href="../../favicon.ico">
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-47258766-7', 'auto');
+      ga('send', 'pageview');
+
+    </script>
+
+    <title>Henry Ventura</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+    <!-- Custom styles for this template -->
+    <!-- <link href="css/cover.css" rel="stylesheet"> -->
+    <link href="css/custom.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        body {
+            padding: 10px;
+        }
+        .circle-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 100px;
+            -webkit-border-radius: 150px;
+            -moz-border-radius: 150px;
+            background: url(img/me.jpg) no-repeat;
+            box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+            -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+            -moz-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+            background-size: 302px !important;
+            background-position: -50px !important;
+            display: inline-block;
+        }
+
+        #me {
+            background: url(img/me.jpg) no-repeat;
+        }
+
+        #him {
+            background: url(img/90sisaliveinportland.jpg) no-repeat;
+        }
+
+        #it {
+            background: url(img/internet.gif) no-repeat;
+            background-size: 255px !important;
+            background-position-x: -30px !important;
+        }
+
+        #dawg {
+            width: 250px;
+            height: 250px;
+            -webkit-background-size: cover !important;
+            -moz-background-size: cover !important;
+            -o-background-size: cover !important;
+            background-size: cover !important;
+            background: url(img/dawg.jpg) no-repeat;
+        }
+
+        .image-container {
+            text-align: right;
+        }
+
+        .main-body-container {
+            padding-top: 50px;
+            padding-bottom: 50px;
+        }
+
+        .big-bold-billy {
+            font-weight: bold;
+        }
+
+        h1 {
+            font-weight: normal;
+        }
+
+        p {
+            font-size: 30px;
+        }
+
+        .left-container h1, .left-container p {
+            display: inline-block;
+            text-align: right;
+        }
+
+        .left-container {
+            text-align: right;
+        }
+
+        .right-container {
+            text-align: left;
+        }
+
+        .row.bump-it-down {
+            padding-top: 50px;
+        }
+
+        .lower-this-guy {
+            padding-top: 40px;
+        }
+
+        .info {
+            margin-top: 100px;
+            /*width: 80%;
+            display: inline-block;
+            margin: 0 auto;*/
+        }
+
+        .info i {
+            font-size: 50px;
+        }
+
+        .where-is-the-hand .fa {
+            font-size: 50px;
+            position: relative;
+            right: 100px;
+            padding-top: 75px;
+        }
+
+        .form-group, .gdi {
+            display: inline-block;
+        }
+
+        form {
+            padding-right: 20px;
+            text-align: right !important;
+        }
+
+        .bottom {
+            display: none;
+            font-size: 50px;
+            /*position: relative;*/
+            /*right: 100px;*/
+            text-align: right;
+            padding-right: 50px;
+            padding-top: 75px;
+        }
+
+        .only-visible-on-small-shit {
+            display: none;
+        }
+
+        @media screen and (max-width: 750px) {
+            .only-visible-on-small-shit {
+                display: block;
+            }
+
+            .bottom {
+                display: block;
+            }
+
+            .top {
+                display: none;
+            }
+            #dawg {
+                background-position-x: 0 !important;
+                width: 100%;
+                height: 300px;
+                -webkit-background-size: cover !important;
+                -moz-background-size: cover !important;
+                -o-background-size: cover !important;
+                background-size: cover !important;
+                  border-radius: 40px !important;
+            }
+        }
+    </style>
+  </head>
+
+  <body>
+
+    <div class="container main-body-container">
+
+        <div class="row">
+            <div class="left-container image-container">
+                <div id="me" class="circle-image"></div>
+            </div>
+            <div class="col-sm-8 right-container">
+                <h1>Hi, my name is <span class="big-bold-billy">Henry Ventura</span> and I have managed <span class="big-bold-billy">software products</span>, implemented <span class="big-bold-billy">custom payment solutions</span>, and strive for <span class="big-bold-billy">progressive social and economic policies</span>.</h1>
+            </div>
+        </div>
+
+        <div class="row bump-it-down info">
+            <a href="mailto:me@hventura.com"><i class="fa fa-inbox"></i></a>
+            <a href="http://twitter.com/hvent90"><i class="fa fa-twitter"></i></a>
+            <a href="https://www.linkedin.com/in/henry-ventura-a6336280/p"><i style="position: relative; top: -3px;" class="fa fa-linkedin"></i></a>
+        </div>
+
+    </div><!-- /.container -->
+  </body>
+</html>
+
