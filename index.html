@@ -48,8 +48,12 @@
           }
         }
 
-        body {
-            padding: 10px;
+        .big-bold-billy {
+            font-weight: bold;
+        }
+
+        h1 {
+            font-weight: normal;
         }
 
         .circle-image {
@@ -73,153 +77,58 @@
           animation: float 6s ease-in-out infinite;
         }
 
-        #him {
-            background: url(img/90sisaliveinportland.jpg) no-repeat;
-        }
-
-        #it {
-            background: url(img/internet.gif) no-repeat;
-            background-size: 255px !important;
-            background-position-x: -30px !important;
-        }
-
-        #dawg {
-            width: 250px;
-            height: 250px;
-            -webkit-background-size: cover !important;
-            -moz-background-size: cover !important;
-            -o-background-size: cover !important;
-            background-size: cover !important;
-            background: url(img/dawg.jpg) no-repeat;
-        }
-
         .image-container {
             text-align: right;
         }
 
-        .main-body-container {
-            padding-top: 50px;
-            padding-bottom: 50px;
+        body {
+          position: relative;
+          min-height: 100vh;
         }
 
-        .big-bold-billy {
-            font-weight: bold;
+        .body-container {
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          right: 0;
+          left: 0;
+
+          padding: 20px;
+          display: flex;
+          flex-direction: column;
         }
 
-        h1 {
-            font-weight: normal;
+        .content {
+          max-width: 900px;
         }
 
-        p {
-            font-size: 30px;
+        .footer {
+          position: absolute;
+          bottom: 20px;
+          left: 20px;
+          font-size: 3em;
         }
 
-        .left-container h1, .left-container p {
-            display: inline-block;
-            text-align: right;
-        }
-
-        .left-container {
-            text-align: right;
-        }
-
-        .right-container {
-            text-align: left;
-        }
-
-        .row.bump-it-down {
-            padding-top: 50px;
-        }
-
-        .lower-this-guy {
-            padding-top: 40px;
-        }
-
-        .info {
-            margin-top: 100px;
-            /*width: 80%;
-            display: inline-block;
-            margin: 0 auto;*/
-        }
-
-        .info i {
-            font-size: 50px;
-        }
-
-        .where-is-the-hand .fa {
-            font-size: 50px;
-            position: relative;
-            right: 100px;
-            padding-top: 75px;
-        }
-
-        .form-group, .gdi {
-            display: inline-block;
-        }
-
-        form {
-            padding-right: 20px;
-            text-align: right !important;
-        }
-
-        .bottom {
-            display: none;
-            font-size: 50px;
-            /*position: relative;*/
-            /*right: 100px;*/
-            text-align: right;
-            padding-right: 50px;
-            padding-top: 75px;
-        }
-
-        .only-visible-on-small-shit {
-            display: none;
-        }
-
-        @media screen and (max-width: 750px) {
-            .only-visible-on-small-shit {
-                display: block;
-            }
-
-            .bottom {
-                display: block;
-            }
-
-            .top {
-                display: none;
-            }
-            #dawg {
-                background-position-x: 0 !important;
-                width: 100%;
-                height: 300px;
-                -webkit-background-size: cover !important;
-                -moz-background-size: cover !important;
-                -o-background-size: cover !important;
-                background-size: cover !important;
-                  border-radius: 40px !important;
-            }
+        @media screen and (max-width: 600px) {
+          .content {
+            font-size: 28px;
+          }
         }
     </style>
   </head>
 
   <body>
+    <div class="body-container">
+      <div class="image-container">
+          <a href="secret.html"><div id="me" class="circle-image"></div></a>
+      </div>
 
-    <div class="container main-body-container">
+      <h1 class="content">Hi, my name is <span class="big-bold-billy">Henry Ventura</span> and I have managed <span class="big-bold-billy">software products</span>, implemented <span class="big-bold-billy">custom payment solutions</span>, and strive for <span class="big-bold-billy">progressive social and economic policies</span>.</h1>
 
-        <div class="row">
-            <div class="left-container image-container">
-                <a href="secret.html"><div id="me" class="circle-image"></div></a>
-            </div>
-            <div class="col-sm-8 right-container">
-                <h1>Hi, my name is <span class="big-bold-billy">Henry Ventura</span> and I have managed <span class="big-bold-billy">software products</span>, implemented <span class="big-bold-billy">custom payment solutions</span>, and strive for <span class="big-bold-billy">progressive social and economic policies</span>.</h1>
-            </div>
-        </div>
-
-        <div class="row bump-it-down info">
-            <a href="mailto:me@hventura.com"><i class="fa fa-inbox"></i></a>
-            <a href="https://www.linkedin.com/in/henry-ventura-a6336280/p"><i style="position: relative; top: -3px;" class="fa fa-linkedin"></i></a>
-        </div>
-
+      <div class="footer">
+          <a href="mailto:me@hventura.com"><i class="fa fa-inbox"></i></a>
+          <a href="https://www.linkedin.com/in/henry-ventura-a6336280/p"><i style="position: relative; top: -3px;" class="fa fa-linkedin"></i></a>
+      </div>
     </div>
 
     <script>
