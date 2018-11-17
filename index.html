@@ -193,7 +193,7 @@
 
         <div class="row">
             <div class="left-container image-container">
-                <div id="me" class="circle-image"></div>
+                <a href="secret.html"><div id="me" class="circle-image"></div></a>
             </div>
             <div class="col-sm-8 right-container">
                 <h1>Hi, my name is <span class="big-bold-billy">Henry Ventura</span> and I have managed <span class="big-bold-billy">software products</span>, implemented <span class="big-bold-billy">custom payment solutions</span>, and strive for <span class="big-bold-billy">progressive social and economic policies</span>.</h1>
@@ -205,7 +205,14 @@
             <a href="https://www.linkedin.com/in/henry-ventura-a6336280/p"><i style="position: relative; top: -3px;" class="fa fa-linkedin"></i></a>
         </div>
 
-    </div><!-- /.container -->
+    </div>
+
+    <script>
+      var img = new Image();
+      img.onload = function() {
+        document.getElementById('me').style.background = 'url(img/secret/3dsine_1.gif)';
+      }
+      img.src = "img/secret/3dsine_1.gif";
+    </script>
   </body>
 </html>
-
