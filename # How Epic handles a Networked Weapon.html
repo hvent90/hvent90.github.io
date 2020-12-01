@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Multiplayer</title>
+        <style>
+</style>
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item { list-style-type: none; } .task-list-item-checkbox { margin-left: -20px; vertical-align: middle; }
+</style>
+        
+        
+        
+    </head>
+    <body class="vscode-body vscode-light">
+        <h1 id="multiplayer">Multiplayer</h1>
+<ul>
+<li><a href="#roles">Roles</a></li>
+<li><a href="#firing">Firing</a></li>
+<li><a href="#execution-flow-in-detail">Execution flow in detail</a></li>
+<li><a href="#visualaudio-effects">Visual/Audio Effects</a></li>
+</ul>
+<h2 id="roles">Roles</h2>
+<p><code>IsLocallyControlled()</code> returns true if being ran on the owning client's machine and false on the server</p>
+<pre><code><code><div>       Actor | Pawn A   | Pawn B   | Pawn C
+Possessed by | Player X | Player Y | Player Z
+ Listen host | true     | false    | false
+
+
+    Computer | Player X
+       Actor | Pawn A    | Pawn B     | Pawn C
+        Role | ??        | Authority  | Authority
+  RemoteRole | ??        | Autonomous | Autonomous
+
+    Computer | Player Y
+       Actor | Pawn A    | Pawn B     | Pawn C
+        Role | ??        | Autonomous | Simulated
+  RemoteRole | ??        | Authority  | Authority
+</div></code></code></pre>
+<pre><code class="language-cpp"><div><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">AController::IsLocalController</span><span class="hljs-params">()</span> <span class="hljs-keyword">const</span> </span>{
+  <span class="hljs-keyword">const</span> ENetMode NetMode = GetNetMode();
+
+  <span class="hljs-keyword">if</span> (NetMode == NM_Standalone) {
+    <span class="hljs-comment">// Not networked.</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+  }
+
+  <span class="hljs-comment">// FALSE On server: local role == Authority</span>
+  <span class="hljs-comment">// TRUE On owning client: local role == AutonomousProxy</span>
+  <span class="hljs-keyword">if</span> (NetMode == NM_Client &amp;&amp; GetLocalRole() == ROLE_AutonomousProxy) {
+    <span class="hljs-comment">// Networked client in control.</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+  }
+
+  <span class="hljs-comment">// FALSE on server for pawns: remote role == autonomous, local role == authority</span>
+  <span class="hljs-comment">// TRUE on server for AI</span>
+  <span class="hljs-comment">// FALSE on client: remote role == authority, local role = autonomous</span>
+  <span class="hljs-keyword">if</span> (GetRemoteRole() != ROLE_AutonomousProxy &amp;&amp; GetLocalRole() == ROLE_Authority) {
+    <span class="hljs-comment">// Local authority in control.</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+  }
+
+  <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+}
+</div></code></pre>
+<h2 id="firing">Firing</h2>
+<p>The requirements of firing a weapon</p>
+<ul>
+<li><strong>A projectile is spawned</strong>: The local client provides input and the server will spawn the projectile.</li>
+<li><strong>Visual/audio effects are replicated to all players</strong>. The server will increment <code>BurstCounter</code>, which is a replicated variable that prompt clients to handle effects.</li>
+</ul>
+<p>The execution flow that demonstrations when the requirements are met (<code>-&gt;</code>):</p>
+<pre><code><code><div>// Remote Client
+C:SetupPlayerInputComponent
+C:OnStartFire
+C:StartWeaponFire                                              // Server
+W:StartFire -----------------------------------------------&gt; ServerStartFire
+DetermineWeaponState                                         StartFire
+SetWeaponState                                               DetermineWeaponState
+OnBurstStarted               // Server                       SetWeaponState
+HandleFiring --------------&gt; ServerHandleFiring:             OnBurstStarted
+FireWeapon                    -&gt; Increments BurstCounter     HandleFiring
+ServerFireProjectile:                                        
+ -&gt; Spawns projectile                                        
+</div></code></code></pre>
+<h2 id="execution-flow-in-detail">Execution flow in detail</h2>
+<p>Explanations of the functions in the execution flow.</p>
+<pre><code class="language-cpp"><div><span class="hljs-comment">/////////////////////////////////</span>
+<span class="hljs-comment">// Character</span>
+
+<span class="hljs-comment">/**
+  [local]
+  - Bind input to StartWeaponFire()
+*/</span>
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">AShooterCharacter::SetupPlayerInputComponent</span><span class="hljs-params">(
+  class UInputComponent* PlayerInputComponent)</span></span>;
+
+<span class="hljs-comment">/**
+  [local]
+  - Gets player controller
+  - Checks if player controller&#x27;s game input is allowed
+  - adjusts other player parameters, such as halting running
+    because the player can&#x27;t run while shooting
+  - calls OnStartFire()
+*/</span>
+AShooterCharacter::StartWeaponFire();
+
+<span class="hljs-comment">/**
+  [local]
+  - Instructs AShooterWeapon to fire given conditions are OK
+*/</span>
+AShooterCharacter::OnStartFire();
+
+<span class="hljs-comment">/**
+  [local]
+  - Instructs AShooterWeapon to fire given conditions are OK
+*/</span>
+AShooterCharacter::StartWeaponFire();
+
+<span class="hljs-comment">/////////////////////////////////</span>
+<span class="hljs-comment">// Weapon</span>
+
+<span class="hljs-comment">/**
+  [local]
+  Upon invocation by AShooterCharacter...
+  - Check the weapon state and potentially
+    perform SetWeapoNState(EWeaponState::Firing)
+  - Instructs [server] to ServerStartFire() if being ran from [local]
+*/</span>
+AShooterWeapon::StartFire();
+
+<span class="hljs-comment">/**
+  [server]
+  - Runs StartFire()
+*/</span>
+AShooterWeapon::ServerStartFire();
+
+<span class="hljs-comment">/**
+  [local]
+  - When given EWeaponState::Firing, it calls OnBurstStarted()
+*/</span>
+AShooterWeapon::SetWeaponState(EWeaponState::Type NewState);
+
+<span class="hljs-comment">/**
+  [local]
+  - Begins the weapon firing process HandleFiring() either
+    immediately or timed if there is a weapon delay
+*/</span>
+AShooterWeapon::OnBurstStarted();
+
+<span class="hljs-comment">/**
+  [local first, then server]
+  - Checks if weapon can fire
+  - Plays visual/audio effects locally
+  - Fires the weapon (FireWeapon)
+  - Instruct remote clients to handle effects (BurstCounter++ or BurstCounter = 0)
+  - Instructs server to ServerHandleFiring
+*/</span>
+AShooterWeapon::HandleFiring();
+
+<span class="hljs-comment">/**
+  [server]
+  - runs HandleFiring()
+  - Instructs remote clients to handle effects (BurstCounter++ or BurstCounter = 0)
+*/</span>
+AShooterWeapon::ServerHandleFiring();
+
+<span class="hljs-comment">/**
+  [local]
+  - Instructs server where to launch projectile
+*/</span>
+AShooterWeapon::FireWeapon();
+
+<span class="hljs-comment">/**
+  [server]
+  - Spawns projectile
+*/</span>
+AShooterWeapon::ServerFireProjectile();
+</div></code></pre>
+<pre><code class="language-cpp"><div><span class="hljs-comment">/** Local + Server */</span>
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">AShooterWeapon::HandleFiring</span><span class="hljs-params">()</span> </span>{
+  <span class="hljs-comment">// Check if gun can fire, trigger visual/audio effects immediately</span>
+  <span class="hljs-comment">// on the local client</span>
+  SimulateWeaponFire();
+
+  <span class="hljs-comment">// If locally controlled, actually fire the weapon</span>
+  FireWeapon();
+  UseAmmo();
+
+  <span class="hljs-keyword">if</span> (IsFiring) {
+    <span class="hljs-comment">// If the weapon can fire, update firing FX</span>
+    <span class="hljs-comment">// on remote clients if function was called on server.</span>
+    <span class="hljs-comment">// Instructs remote clients to SimulateWeaponFire.</span>
+    BurstCounter++;
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-comment">// If can&#x27;t fire anymore, instruct remote clients to StopSimulatingWeaponFire.</span>
+    BurstCounter = <span class="hljs-number">0</span>;
+
+    <span class="hljs-comment">// Immediately run on local client</span>
+    StopSimulatingWeaponFire();
+  }
+
+  <span class="hljs-keyword">if</span> (!IsFiring) {
+    BurstCounter = <span class="hljs-number">0</span>;
+  }
+
+  <span class="hljs-comment">// If local client...</span>
+  <span class="hljs-keyword">if</span> (MyPawn &amp;&amp; MyPawn -&gt; IsLocallyControlled()) {
+    <span class="hljs-comment">// local client will notify server</span>
+    <span class="hljs-keyword">if</span> (GetLocalRole() &lt; ROLE_Authority) {
+      ServerHandleFiring();
+    }
+
+    <span class="hljs-comment">// reload after firing last round</span>
+
+    <span class="hljs-comment">// Handle weapon firing delay</span>
+  }
+}
+
+<span class="hljs-comment">// HandleFiring is first called locally, and then calls the server version.</span>
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">AShooterWeapon::ServerHandleFiring_Implementation</span><span class="hljs-params">()</span> </span>{
+  <span class="hljs-keyword">const</span> <span class="hljs-keyword">bool</span> bShouldUpdateAmmo = (CurrentAmmoInClip &gt; <span class="hljs-number">0</span> &amp;&amp; CanFire());
+
+  HandleFiring();
+
+  <span class="hljs-keyword">if</span> (bShouldUpdateAmmo) {
+    <span class="hljs-comment">// update ammo</span>
+    UseAmmo();
+
+    <span class="hljs-comment">// update firing FX on remote clients</span>
+    BurstCounter++;
+  }
+}
+
+<span class="hljs-comment">/** Local */</span>
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">AShooterWeapon_Projectile::FireWeapon</span><span class="hljs-params">()</span> </span>{
+  FVector ShootDir = GetAdjustedAim();
+  FVector Origin = GetMuzzleLocation();
+
+  ServerFireProjectile(Origin, ShootDir);
+}
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">AShooterWeapon_Projectile::ServerFireProjectile_Implementation</span><span class="hljs-params">(
+  FVector Origin, FVector_NetQuantizeNormal ShootDir)</span> </span>{
+  <span class="hljs-function">FTransform <span class="hljs-title">SpawnTM</span><span class="hljs-params">(ShootDir.Rotation(), Origin)</span></span>;
+
+  <span class="hljs-comment">/**
+    BeginDeferredActorSpawnFromClass allows for adjusting 
+    actor parameters before it is brought into the world.
+  */</span>
+  AShooterProjectile * Projectile = Cast &lt; AShooterProjectile &gt; (UGameplayStatics::BeginDeferredActorSpawnFromClass(
+    <span class="hljs-keyword">this</span>, ProjectileConfig.ProjectileClass, SpawnTM));
+  <span class="hljs-keyword">if</span> (Projectile) {
+    <span class="hljs-comment">// Designate who spawned the actor</span>
+    Projectile -&gt; SetInstigator(GetInstigator());
+
+    <span class="hljs-comment">// Not sure the importance of setting the owner</span>
+    Projectile -&gt; SetOwner(<span class="hljs-keyword">this</span>);
+    Projectile -&gt; InitVelocity(ShootDir);
+
+    <span class="hljs-comment">// Projectile handles its movement from here</span>
+    UGameplayStatics::FinishSpawningActor(Projectile, SpawnTM);
+  }
+}
+</div></code></pre>
+<h2 id="visualaudio-effects">Visual/Audio Effects</h2>
+<p>Local effects are triggered by the server.</p>
+<p>For looping audio, weapons only have <code>FireLoopSound</code> and <code>FireFinishSound</code>. They do not have a &quot;start&quot; sound. Single-fire weapons only have a single <code>FireSound</code>.</p>
+<p>With regards to animations, weapons have a single <code>FireAnim</code>.</p>
+<pre><code class="language-cpp"><div><span class="hljs-comment">/**
+  Server increments BurstCounter when Firing
+  Server sets to 0 upon no longer firing
+*/</span>
+UPROPERTY(Transient, ReplicatedUsing=OnRep_BurstCounter)
+int32 BurstCounter;
+
+<span class="hljs-comment">/**
+  Client calls OnRep_BurstCounter automatically upon
+  server changing BurstCounter
+  
+  When BurstCounter &gt; 0, it handles effects.
+  When BurstCounter == 0, it gracefully ends effects.
+*/</span>
+UFUNCTION()
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">OnRep_BurstCounter</span><span class="hljs-params">()</span> </span>{
+  <span class="hljs-keyword">if</span> (BurstCounter &gt; <span class="hljs-number">0</span>)
+  {
+    SimulateWeaponFire(); <span class="hljs-comment">// Plays start/loop effects</span>
+  }
+  <span class="hljs-keyword">else</span>
+  {
+    StopSimulatingWeaponFire(); <span class="hljs-comment">// Deactivates start/loop effects</span>
+                                <span class="hljs-comment">// and plays end effects</span>
+  }
+}
+</div></code></pre>
+
+    </body>
+    </html>
