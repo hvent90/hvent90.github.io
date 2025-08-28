@@ -40,10 +40,17 @@
             flex: 1;
             position: sticky;
             top: 40px;
-            background: #f8f9fa;
             padding: 30px;
-            border-radius: 8px;
             min-width: 280px;
+            height: calc(100vh - 80px);
+            overflow-y: auto;
+            overflow-x: hidden;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* Internet Explorer 10+ */
+        }
+        
+        .sidebar::-webkit-scrollbar {
+            display: none; /* WebKit */
         }
         
         h1 {
@@ -133,6 +140,9 @@
         
         .media-section {
             margin-bottom: 30px;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
         }
         
         .media-section:last-child {
@@ -154,9 +164,6 @@
         .media-section {
             opacity: 0.3;
             transition: opacity 0.3s ease, background-color 0.2s ease;
-            padding: 15px;
-            margin: -15px;
-            border-radius: 4px;
         }
         
         .media-section.active {
@@ -245,6 +252,61 @@
                 margin-right: 0;
             }
         }
+        
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            cursor: pointer;
+        }
+        
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 8px;
+        }
+        
+        .modal img {
+            max-width: 90vw;
+            max-height: 90vh;
+            width: auto;
+            height: auto;
+            border-radius: 8px;
+            object-fit: contain;
+            display: block;
+        }
+        
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 1001;
+        }
+        
+        .close:hover {
+            opacity: 0.7;
+        }
+        
+        .clickable-image {
+            cursor: pointer;
+            transition: opacity 0.2s ease;
+        }
+        
+        .clickable-image:hover {
+            opacity: 0.8;
+        }
     </style>
     
     <script>
@@ -252,8 +314,12 @@
             const projectItems = document.querySelectorAll('.has-media');
             const mediaSections = document.querySelectorAll('.media-section');
             let isHovering = false;
+            let currentActiveProject = null;
             
-            function updateActiveMedia(projectId) {
+            function updateActiveMedia(projectId, shouldScrollIntoView = false) {
+                // Only scroll if this is a different project than currently active
+                const shouldAutoScroll = shouldScrollIntoView && projectId !== currentActiveProject;
+                
                 // Remove active classes from all items
                 projectItems.forEach(item => {
                     item.classList.remove('scroll-active');
@@ -269,11 +335,32 @@
                     
                     if (correspondingMedia) {
                         correspondingMedia.classList.add('active', 'scroll-highlight');
+                        
+                        // Scroll media section into view within sidebar only if it's a new project
+                        if (shouldAutoScroll) {
+                            // Use requestAnimationFrame to ensure DOM is updated before calculating positions
+                            requestAnimationFrame(() => {
+                                const sidebar = document.querySelector('.sidebar');
+                                const mediaRect = correspondingMedia.getBoundingClientRect();
+                                const sidebarRect = sidebar.getBoundingClientRect();
+                                
+                                // Calculate the position to scroll the title to the top of the sidebar
+                                const targetScrollTop = sidebar.scrollTop + (mediaRect.top - sidebarRect.top);
+                                
+                                sidebar.scrollTo({
+                                    top: targetScrollTop,
+                                    behavior: 'smooth'
+                                });
+                            });
+                        }
                     }
                     if (correspondingProject) {
                         correspondingProject.classList.add('scroll-active');
                     }
                 }
+                
+                // Update the current active project
+                currentActiveProject = projectId;
             }
             
             function getVisibleProject() {
@@ -310,7 +397,7 @@
             function handleScroll() {
                 if (!isHovering) {
                     const visibleProject = getVisibleProject();
-                    updateActiveMedia(visibleProject);
+                    updateActiveMedia(visibleProject, true);
                 }
             }
             
@@ -331,7 +418,8 @@
                 
                 item.addEventListener('mouseleave', function() {
                     isHovering = false;
-                    setTimeout(handleScroll, 100);
+                    // Don't auto-scroll when leaving project items
+                    // Let the scroll handler determine the active project naturally
                 });
             });
             
@@ -346,8 +434,40 @@
                 
                 section.addEventListener('mouseleave', function() {
                     isHovering = false;
-                    setTimeout(handleScroll, 100);
+                    // Don't auto-scroll when leaving media sections
+                    // Let the scroll handler determine the active project naturally
                 });
+            });
+            
+            // Modal functionality
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            const closeBtn = document.getElementsByClassName('close')[0];
+            
+            // Add click listeners to clickable images
+            document.querySelectorAll('.clickable-image').forEach(img => {
+                img.addEventListener('click', function() {
+                    modal.style.display = 'block';
+                    modalImg.src = this.src;
+                });
+            });
+            
+            // Close modal when clicking the close button or outside the image
+            closeBtn.addEventListener('click', function() {
+                modal.style.display = 'none';
+            });
+            
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+            
+            // Close modal with Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && modal.style.display === 'block') {
+                    modal.style.display = 'none';
+                }
             });
         });
     </script>
@@ -469,6 +589,9 @@
                 <div class="media-section" data-project="delos">
                     <h3>Delos: Space Traffic Control</h3>
                     <div class="media-embed">
+                        <img src="img/delos-backend.jpg" alt="Delos Backend" class="clickable-image" style="width: 100%; border-radius: 4px; margin-bottom: 15px;">
+                    </div>
+                    <div class="media-embed">
                         <blockquote class="twitter-tweet"><p lang="en" dir="ltr">Delos: Space Traffic Control<br><br>Launch trailer<br><br>Wishlist on Steam! <a href="https://t.co/abc123">pic.twitter.com/abc123</a></p>&mdash; Henry Ventura (@hvent90) <a href="https://twitter.com/hvent90/status/1913274623107674266">January 16, 2025</a></blockquote>
                         <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
                     </div>
@@ -484,6 +607,11 @@
                 <div class="media-section" data-project="royal-division">
                     <h3>Royal Division</h3>
                     <div class="media-embed">
+                        <blockquote class="twitter-tweet"><p lang="en" dir="ltr"><a href="https://twitter.com/RoyalDivisionG1/status/1712945780896735728">https://twitter.com/RoyalDivisionG1/status/1712945780896735728</a></p>&mdash; Royal Division (@RoyalDivisionG1) <a href="https://twitter.com/RoyalDivisionG1/status/1712945780896735728">October 13, 2023</a></blockquote>
+                        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+                    </div>
+                    
+                    <div class="media-embed">
                         <iframe src="https://www.youtube.com/embed/7gQN2Wz7VqA" allowfullscreen></iframe>
                     </div>
                     
@@ -494,6 +622,14 @@
                 </div>
             </div>
         </aside>
+    </div>
+    
+    <!-- Modal for full-size images -->
+    <div id="imageModal" class="modal">
+        <span class="close">&times;</span>
+        <div class="modal-content">
+            <img id="modalImage" alt="Full size image">
+        </div>
     </div>
 </body>
 </html>
