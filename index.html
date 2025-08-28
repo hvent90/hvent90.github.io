@@ -96,8 +96,46 @@
             text-decoration: underline;
         }
         
+        .project-header {
+            display: flex;
+            align-items: baseline;
+            gap: 0;
+            flex-wrap: wrap;
+            margin-bottom: 6px;
+        }
+        
+        .project-header > * {
+            margin-right: 8px;
+        }
+        
+        .project-header > *:last-child {
+            margin-right: 0;
+        }
+        
+        .project-date {
+            color: #666;
+            font-size: 0.9rem;
+            font-weight: 400;
+        }
+        
+        .project-date::before {
+            content: "•";
+            margin-right: 8px;
+        }
+        
+        .project-subtitle {
+            color: #666;
+            font-size: 0.95rem;
+            font-weight: 400;
+        }
+        
+        .project-subtitle::before {
+            content: "•";
+            margin-right: 8px;
+        }
+        
         .project-description {
-            margin-top: 8px;
+            margin-top: 4px;
             color: #666;
             font-size: 0.95rem;
         }
@@ -307,6 +345,18 @@
         .clickable-image:hover {
             opacity: 0.8;
         }
+        
+        /* Reduce SoundCloud embed visual distraction */
+        iframe[src*="soundcloud.com"] {
+            filter: saturate(0.3) brightness(1) blur(5px);
+            opacity: 0.2;
+            transition: filter 0.2s ease, opacity 0.2s ease;
+        }
+        
+        iframe[src*="soundcloud.com"]:hover {
+            filter: saturate(1) brightness(1) blur(0px);
+            opacity: 1;
+        }
     </style>
     
     <script>
@@ -485,45 +535,63 @@
                 <a href="secret.html" target="_blank">Motion Graphics</a>
                 <a href="https://soundcloud.com/henry-ventura-1" target="_blank">Music</a>
             </div>
+
+            <i>thread music</i>
+            <iframe width="100%" height="100" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/304902316&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe><div style="font-size: 10px; color: #cccccc;line-break: anywhere;word-break: normal;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; font-family: Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif;font-weight: 100;"><a href="https://soundcloud.com/henry-ventura-1" title="Henry" target="_blank" style="color: #cccccc; text-decoration: none;">Henry</a> · <a href="https://soundcloud.com/henry-ventura-1/with-unilateral-agreement" title="With Unilateral Agreement" target="_blank" style="color: #cccccc; text-decoration: none;">With Unilateral Agreement</a></div>
             
             <h2>Projects</h2>
     <ul>
         <li>
-            <span class="project-title">Semantic</span>
+            <div class="project-header">
+                <span class="project-title">Semantic</span>
+                <span class="project-date">2025</span>
+                <span class="project-subtitle">Codebase Context Tool for AI Agents</span>
+            </div>
             <div class="project-description">
-                <strong>2025</strong> • Codebase Context Tool for AI Agents<br>
                 Creates a "semantic layer" over software codebases, enabling AI coding agents to gain high-level understanding of project structure without processing every file. Generates concise, machine-readable summary files for token-efficient context.<br>
                 <a href="https://github.com/hvent90/semantic" target="_blank">GitHub</a> • <a href="https://x.com/hvent90/status/1959073134533050547" target="_blank">Announcement</a>
             </div>
         </li>
         <li>
-            <span class="project-title">Prism</span>
+            <div class="project-header">
+                <span class="project-title">Prism</span>
+                <span class="project-date">2025</span>
+                <span class="project-subtitle">Codebase Context Tool for AI Agents</span>
+            </div>
             <div class="project-description">
-                <strong>2025</strong> • Codebase Context Tool for AI Agents<br>
                 AST extraction and graph visualization tool for Python codebases. Uses static analysis augmented with LLM semantic intent, RAG for entry points, and pathfinding with LOD-style detail gradients. Enables LLMs to intelligently grab context from massive codebases for one-shot feature requests and bug fixes.<br>
                 <a href="https://github.com/hvent90/prism" target="_blank">GitHub</a>
             </div>
         </li>
         <li class="has-media" data-media="delos">
-            <span class="project-title">Delos: Space Traffic Control</span>
+            <div class="project-header">
+                <span class="project-title">Delos: Space Traffic Control</span>
+                <span class="project-date">2025</span>
+                <span class="project-subtitle">Space Sim</span>
+            </div>
             <div class="project-description">
-                <strong>2025</strong> • Space Sim<br>
                 Space traffic control simulation game built in C++ with Unreal Engine. Achieved 1000+ sales in 3 months, built community of 160+ Discord users, received publisher outreach. Includes full-stack companion apps with Node.js, NestJS, React, TypeScript, NoSQL database, and websockets.<br>
                 <a href="https://delos-game.com/" target="_blank">Website</a>
             </div>
         </li>
         <li>
-            <span class="project-title">TL;DReddit</span>
+            <div class="project-header">
+                <span class="project-title">TL;DReddit</span>
+                <span class="project-date">2024</span>
+                <span class="project-subtitle">Reddit User Sentiment Analysis</span>
+            </div>
             <div class="project-description">
-                <strong>2024</strong> • Reddit User Sentiment Analysis<br>
                 User sentiment analysis of Reddit threads with thousands of comments. Extracts 5 main themes, supporting/opposing arguments, and cites individual comments for comprehensive thread understanding.<br>
                 <a href="https://www.loom.com/share/43ad6edfe4194c6e828fa50581dda4dd" target="_blank">Demo</a>
             </div>
         </li>
         <li class="has-media" data-media="reunion">
-            <span class="project-title">Reunion</span>
+            <div class="project-header">
+                <span class="project-title">Reunion</span>
+                <span class="project-date">2020</span>
+                <span class="project-subtitle">Digital Short</span>
+            </div>
             <div class="project-description">
-                <strong>2020</strong> • Digital Short<br>
                 A short film made in Unity<br>
                 <a href="https://www.youtube.com/watch?v=0PqRvkuUkeM" target="_blank">Video</a>
             </div>
@@ -566,18 +634,18 @@
             </div>
         </li>
         <li>
+            <span class="project-title">Philadelphia University of the Arts</span>
+            <div class="project-description">
+                <strong>September 2014 - December 2014</strong> • Adjunct Professor<br>
+                Taught JavaScript to university students.
+            </div>
+        </li>
+        <li>
             <span class="project-title">Walnut St. Labs</span>
             <div class="project-description">
                 <strong>September 2013 - March 2015</strong> • Special Projects Lead<br>
                 Led development on automated booking software, prototyped experimental projects for investor demos. Trained employees on technology stack and client account management. Helped run local media platform with sponsored content revenue generation.<br>
                 <a href="https://walnutstlabs.com/" target="_blank">Website</a>
-            </div>
-        </li>
-        <li>
-            <span class="project-title">Philadelphia University of the Arts</span>
-            <div class="project-description">
-                <strong>September 2014 - December 2014</strong> • Adjunct Professor<br>
-                Taught JavaScript to university students.
             </div>
         </li>
     </ul>
