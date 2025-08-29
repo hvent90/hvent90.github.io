@@ -471,6 +471,19 @@
             filter: saturate(1) brightness(1) blur(0px);
             opacity: 1;
         }
+        
+        /* Disable SoundCloud filters on mobile */
+        @media (max-width: 900px) {
+            iframe[src*="soundcloud.com"] {
+                filter: none;
+                opacity: 1;
+            }
+            
+            iframe[src*="soundcloud.com"]:hover {
+                filter: none;
+                opacity: 1;
+            }
+        }
     </style>
     
     <script>
