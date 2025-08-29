@@ -247,15 +247,129 @@
             
         }
         
+        /* Mobile drawer styles */
+        .drawer-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            right: 79px; /* Position at the visible edge of the closed drawer */
+            z-index: 1002;
+            background: white;
+            color: #333;
+            border: 1px solid #ddd;
+            border-right: white;
+            border-radius: 4px 0 0 4px; /* Only round left corners */
+            width: 44px;
+            height: 44px;
+            font-size: 16px;
+            font-weight: 300;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: -2px 0 4px rgba(0,0,0,0.1);
+        }
+        
+        .drawer-toggle:hover {
+            background: #f8f9fa;
+            border-color: #ccc;
+        }
+        
+        /* When drawer is open, move button to the left edge of the fully opened drawer */
+        .drawer-toggle.drawer-open {
+            right: calc(80vw - 1px);
+        }
+        
+        .drawer-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .drawer-overlay.active {
+            opacity: 1;
+        }
+
         @media (max-width: 900px) {
             .container {
                 flex-direction: column;
             }
             
+            .drawer-toggle {
+                display: block;
+            }
+            
             .sidebar {
-                position: static;
-                order: -1;
-                margin-bottom: 40px;
+                position: fixed;
+                top: 0;
+                right: calc(-80vw + 80px); /* Show 80px of content when docked */
+                width: 80vw; /* 80% of viewport width */
+                height: 100vh;
+                background: white;
+                z-index: 1000;
+                transition: right 0.3s ease;
+                border-left: 1px solid #eee;
+                box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+                overflow-y: auto;
+                overflow-x: hidden;
+                padding: 80px 20px 20px 20px; /* Top padding for toggle button */
+            }
+            
+            .sidebar::before {
+                content: '';
+                position: absolute;
+                left: -5px;
+                top: 0;
+                width: 5px;
+                height: 100%;
+                background: linear-gradient(to right, rgba(0,0,0,0.1), rgba(0,0,0,0.05));
+                cursor: pointer;
+            }
+            
+            /* Make media content partially visible when docked */
+            .sidebar h2,
+            .sidebar h3 {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            
+            .media-section {
+                position: relative;
+            }
+            
+            .media-section .media-embed {
+                transform: scale(0.7);
+                transform-origin: left top;
+                pointer-events: none;
+                opacity: 0.8;
+            }
+            
+            .sidebar.drawer-open .media-embed {
+                transform: scale(1);
+                pointer-events: auto;
+                opacity: 1;
+            }
+            
+            .sidebar.drawer-open {
+                right: 0;
+            }
+            
+            .main-content {
+                margin-right: 80px; /* Account for visible drawer edge */
+                transition: margin-right 0.3s ease;
+            }
+            
+            .main-content.drawer-open {
+                margin-right: 0; /* Remove margin when drawer is fully open */
             }
             
             .contact a {
@@ -263,7 +377,6 @@
                 margin-right: 20px;
                 margin-bottom: 0;
             }
-            
         }
         
         @media (max-width: 600px) {
@@ -280,8 +393,9 @@
             }
             
             .sidebar {
-                padding: 20px;
-                margin-bottom: 30px;
+                width: 80vw; /* 80% of viewport width on mobile too */
+                right: calc(-80vw + 80px); /* Show 80px on mobile */
+                padding: 80px 15px 20px 15px;
             }
             
             .contact a {
@@ -365,6 +479,111 @@
             const mediaSections = document.querySelectorAll('.media-section');
             let isHovering = false;
             let currentActiveProject = null;
+            
+            // Mobile drawer functionality
+            const sidebar = document.querySelector('.sidebar');
+            const drawerToggle = document.querySelector('.drawer-toggle');
+            const drawerOverlay = document.querySelector('.drawer-overlay');
+            const mainContent = document.querySelector('.main-content');
+            let isDrawerOpen = false;
+            let touchStartX = 0;
+            let touchStartY = 0;
+            let isDragging = false;
+            
+            function openDrawer() {
+                isDrawerOpen = true;
+                sidebar.classList.add('drawer-open');
+                mainContent.classList.add('drawer-open');
+                drawerToggle.classList.add('drawer-open');
+                drawerOverlay.style.display = 'block';
+                setTimeout(() => drawerOverlay.classList.add('active'), 10);
+                drawerToggle.innerHTML = '×';
+            }
+            
+            function closeDrawer() {
+                isDrawerOpen = false;
+                sidebar.classList.remove('drawer-open');
+                mainContent.classList.remove('drawer-open');
+                drawerToggle.classList.remove('drawer-open');
+                drawerOverlay.classList.remove('active');
+                setTimeout(() => drawerOverlay.style.display = 'none', 300);
+                drawerToggle.innerHTML = '☰';
+            }
+            
+            function toggleDrawer() {
+                if (isDrawerOpen) {
+                    closeDrawer();
+                } else {
+                    openDrawer();
+                }
+            }
+            
+            // Toggle button click
+            if (drawerToggle) {
+                drawerToggle.addEventListener('click', toggleDrawer);
+            }
+            
+            // Overlay click to close
+            if (drawerOverlay) {
+                drawerOverlay.addEventListener('click', closeDrawer);
+            }
+            
+            // Touch/swipe functionality
+            document.addEventListener('touchstart', function(e) {
+                touchStartX = e.touches[0].clientX;
+                touchStartY = e.touches[0].clientY;
+                isDragging = false;
+            }, { passive: true });
+            
+            document.addEventListener('touchmove', function(e) {
+                if (!touchStartX) return;
+                
+                const touchX = e.touches[0].clientX;
+                const touchY = e.touches[0].clientY;
+                const deltaX = touchStartX - touchX;
+                const deltaY = touchStartY - touchY;
+                
+                // Only consider horizontal swipes
+                if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
+                    isDragging = true;
+                }
+            }, { passive: true });
+            
+            document.addEventListener('touchend', function(e) {
+                if (!touchStartX || !isDragging) {
+                    touchStartX = 0;
+                    touchStartY = 0;
+                    isDragging = false;
+                    return;
+                }
+                
+                const touchEndX = e.changedTouches[0].clientX;
+                const deltaX = touchStartX - touchEndX;
+                
+                // Swipe left to open drawer (from right edge)
+                if (deltaX < -100 && touchStartX > window.innerWidth - 50 && !isDrawerOpen) {
+                    openDrawer();
+                }
+                // Swipe right to close drawer
+                else if (deltaX > 100 && isDrawerOpen) {
+                    closeDrawer();
+                }
+                
+                touchStartX = 0;
+                touchStartY = 0;
+                isDragging = false;
+            }, { passive: true });
+            
+            // Click on sidebar edge to open
+            if (sidebar) {
+                sidebar.addEventListener('click', function(e) {
+                    // Check if click was on the visible edge (::before pseudo-element area)
+                    const rect = sidebar.getBoundingClientRect();
+                    if (e.clientX < rect.left + 20 && !isDrawerOpen) {
+                        openDrawer();
+                    }
+                });
+            }
             
             function updateActiveMedia(projectId, shouldScrollIntoView = false, forceScroll = false) {
                 // Only scroll if this is a different project than currently active, or if forced
@@ -542,6 +761,12 @@
 </head>
 
 <body>
+    <!-- Mobile drawer toggle button -->
+    <button class="drawer-toggle" aria-label="Toggle media drawer">☰</button>
+    
+    <!-- Drawer overlay -->
+    <div class="drawer-overlay"></div>
+    
     <div class="container">
         <main class="main-content">
             <h1>Henry Ventura</h1>
