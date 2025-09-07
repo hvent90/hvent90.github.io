@@ -66,6 +66,7 @@ class CarouselComponent extends HTMLElement {
         
         .carousel-slide {
           width: 100%;
+          max-width: 400px;
           opacity: 0.4;
           transform: translateY(8px);
           transition: opacity 0.3s ease, transform 0.3s ease;
