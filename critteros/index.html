@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="CritterOS – Say hello and join the community on Discord">
+  <meta name="author" content="Henry Ventura">
+  <title>CritterOS</title>
+  <!-- Tailwind CSS (for BaseCN/Shadcn utility-based styling) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Minimal Tailwind config for nicer default font stack
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: [
+              'Inter var',
+              'ui-sans-serif',
+              'system-ui',
+              'Segoe UI',
+              'Roboto',
+              'Helvetica Neue',
+              'Arial',
+              'Noto Sans',
+              'Apple Color Emoji',
+              'Segoe UI Emoji',
+              'Segoe UI Symbol',
+              'Noto Color Emoji'
+            ]
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Fonts for the requested theme (Poppins, Lora, Fira Code) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Lora:ital,wght@0,400..700;1,400..700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Carousel Web Components -->
+  <script src="../components/carousel-component.js"></script>
+  <script src="../components/critteros-carousel.js"></script>
+  <script src="../components/villageos-carousel.js"></script>
+
+  <!-- Theme variables (light and dark) using OKLCH, plus shadow/radius tokens) -->
+  <style>
+    :root {
+      --background: oklch(0.9399 0.0203 345.6985);
+      --foreground: oklch(0.4712 0 0);
+      --card: oklch(0.9498 0.0500 86.8891);
+      --card-foreground: oklch(0.4712 0 0);
+      --popover: oklch(1.0000 0 0);
+      --popover-foreground: oklch(0.4712 0 0);
+      --primary: oklch(0.6209 0.1801 348.1385);
+      --primary-foreground: oklch(1.0000 0 0);
+      --secondary: oklch(0.8095 0.0694 198.1863);
+      --secondary-foreground: oklch(0.3211 0 0);
+      --muted: oklch(0.8800 0.0504 212.0952);
+      --muted-foreground: oklch(0.5795 0 0);
+      --accent: oklch(0.9195 0.0801 87.6670);
+      --accent-foreground: oklch(0.3211 0 0);
+      --destructive: oklch(0.7091 0.1697 21.9551);
+      --destructive-foreground: oklch(1.0000 0 0);
+      --border: oklch(0.6209 0.1801 348.1385);
+      --input: oklch(0.9189 0 0);
+      --ring: oklch(0.7002 0.1597 350.7532);
+      --chart-1: oklch(0.7002 0.1597 350.7532);
+      --chart-2: oklch(0.7794 0.0803 4.1330);
+      --chart-3: oklch(0.9195 0.0801 87.6670);
+      --chart-4: oklch(0.7998 0.1110 348.1791);
+      --chart-5: oklch(0.6197 0.1899 353.9091);
+      --sidebar: oklch(0.9140 0.0424 343.0913);
+      --sidebar-foreground: oklch(0.3211 0 0);
+      --sidebar-primary: oklch(0.6559 0.2118 354.3084);
+      --sidebar-primary-foreground: oklch(1.0000 0 0);
+      --sidebar-accent: oklch(0.8228 0.1095 346.0184);
+      --sidebar-accent-foreground: oklch(0.3211 0 0);
+      --sidebar-border: oklch(0.9464 0.0327 307.1745);
+      --sidebar-ring: oklch(0.6559 0.2118 354.3084);
+      --font-sans: Poppins, sans-serif;
+      --font-serif: Lora, serif;
+      --font-mono: Fira Code, monospace;
+      --radius: 0.4rem;
+      --shadow-2xs: 3px 3px 0px 0px hsl(325.7800 58.1800% 56.8600% / 0.50);
+      --shadow-xs: 3px 3px 0px 0px hsl(325.7800 58.1800% 56.8600% / 0.50);
+      --shadow-sm: 3px 3px 0px 0px hsl(325.7800 58.1800% 56.8600% / 1.00), 3px 1px 2px -1px hsl(325.7800 58.1800% 56.8600% / 1.00);
+      --shadow: 3px 3px 0px 0px hsl(325.7800 58.1800% 56.8600% / 1.00), 3px 1px 2px -1px hsl(325.7800 58.1800% 56.8600% / 1.00);
+      --shadow-md: 3px 3px 0px 0px hsl(325.7800 58.1800% 56.8600% / 1.00), 3px 2px 4px -1px hsl(325.7800 58.1800% 56.8600% / 1.00);
+      --shadow-lg: 3px 3px 0px 0px hsl(325.7800 58.1800% 56.8600% / 1.00), 3px 4px 6px -1px hsl(325.7800 58.1800% 56.8600% / 1.00);
+      --shadow-xl: 3px 3px 0px 0px hsl(325.7800 58.1800% 56.8600% / 1.00), 3px 8px 10px -1px hsl(325.7800 58.1800% 56.8600% / 1.00);
+      --shadow-2xl: 3px 3px 0px 0px hsl(325.7800 58.1800% 56.8600% / 2.50);
+      --tracking-normal: 0em;
+      --spacing: 0.25rem;
+    }
+
+    .dark {
+      --background: oklch(0.2497 0.0305 234.1628);
+      --foreground: oklch(0.9306 0.0197 349.0785);
+      --card: oklch(0.2902 0.0299 233.5352);
+      --card-foreground: oklch(0.9306 0.0197 349.0785);
+      --popover: oklch(0.2902 0.0299 233.5352);
+      --popover-foreground: oklch(0.9306 0.0197 349.0785);
+      --primary: oklch(0.9195 0.0801 87.6670);
+      --primary-foreground: oklch(0.2497 0.0305 234.1628);
+      --secondary: oklch(0.7794 0.0803 4.1330);
+      --secondary-foreground: oklch(0.2497 0.0305 234.1628);
+      --muted: oklch(0.2713 0.0086 255.5780);
+      --muted-foreground: oklch(0.7794 0.0803 4.1330);
+      --accent: oklch(0.6699 0.0988 356.9762);
+      --accent-foreground: oklch(0.9306 0.0197 349.0785);
+      --destructive: oklch(0.6702 0.1806 350.3599);
+      --destructive-foreground: oklch(0.2497 0.0305 234.1628);
+      --border: oklch(0.3907 0.0399 242.2181);
+      --input: oklch(0.3093 0.0305 232.0027);
+      --ring: oklch(0.6998 0.0896 201.8672);
+      --chart-1: oklch(0.6998 0.0896 201.8672);
+      --chart-2: oklch(0.7794 0.0803 4.1330);
+      --chart-3: oklch(0.6699 0.0988 356.9762);
+      --chart-4: oklch(0.4408 0.0702 217.0848);
+      --chart-5: oklch(0.2713 0.0086 255.5780);
+      --sidebar: oklch(0.2303 0.0270 235.9743);
+      --sidebar-foreground: oklch(0.9670 0.0029 264.5419);
+      --sidebar-primary: oklch(0.6559 0.2118 354.3084);
+      --sidebar-primary-foreground: oklch(1.0000 0 0);
+      --sidebar-accent: oklch(0.8228 0.1095 346.0184);
+      --sidebar-accent-foreground: oklch(0.2781 0.0296 256.8480);
+      --sidebar-border: oklch(0.3729 0.0306 259.7328);
+      --sidebar-ring: oklch(0.6559 0.2118 354.3084);
+      --font-sans: Poppins, sans-serif;
+      --font-serif: Lora, serif;
+      --font-mono: Fira Code, monospace;
+      --radius: 0.4rem;
+      --shadow-2xs: 3px 3px 0px 0px hsl(206.1538 28.0576% 27.2549% / 0.50);
+      --shadow-xs: 3px 3px 0px 0px hsl(206.1538 28.0576% 27.2549% / 0.50);
+      --shadow-sm: 3px 3px 0px 0px hsl(206.1538 28.0576% 27.2549% / 1.00), 3px 1px 2px -1px hsl(206.1538 28.0576% 27.2549% / 1.00);
+      --shadow: 3px 3px 0px 0px hsl(206.1538 28.0576% 27.2549% / 1.00), 3px 1px 2px -1px hsl(206.1538 28.0576% 27.2549% / 1.00);
+      --shadow-md: 3px 3px 0px 0px hsl(206.1538 28.0576% 27.2549% / 1.00), 3px 2px 4px -1px hsl(206.1538 28.0576% 27.2549% / 1.00);
+      --shadow-lg: 3px 3px 0px 0px hsl(206.1538 28.0576% 27.2549% / 1.00), 3px 4px 6px -1px hsl(206.1538 28.0576% 27.2549% / 1.00);
+      --shadow-xl: 3px 3px 0px 0px hsl(206.1538 28.0576% 27.2549% / 1.00), 3px 8px 10px -1px hsl(206.1538 28.0576% 27.2549% / 1.00);
+      --shadow-2xl: 3px 3px 0px 0px hsl(206.1538 28.0576% 27.2549% / 2.50);
+    }
+
+    @theme inline {
+      --color-background: var(--background);
+      --color-foreground: var(--foreground);
+      --color-card: var(--card);
+      --color-card-foreground: var(--card-foreground);
+      --color-popover: var(--popover);
+      --color-popover-foreground: var(--popover-foreground);
+      --color-primary: var(--primary);
+      --color-primary-foreground: var(--primary-foreground);
+      --color-secondary: var(--secondary);
+      --color-secondary-foreground: var(--secondary-foreground);
+      --color-muted: var(--muted);
+      --color-muted-foreground: var(--muted-foreground);
+      --color-accent: var(--accent);
+      --color-accent-foreground: var(--accent-foreground);
+      --color-destructive: var(--destructive);
+      --color-destructive-foreground: var(--destructive-foreground);
+      --color-border: var(--border);
+      --color-input: var(--input);
+      --color-ring: var(--ring);
+      --color-chart-1: var(--chart-1);
+      --color-chart-2: var(--chart-2);
+      --color-chart-3: var(--chart-3);
+      --color-chart-4: var(--chart-4);
+      --color-chart-5: var(--chart-5);
+      --color-sidebar: var(--sidebar);
+      --color-sidebar-foreground: var(--sidebar-foreground);
+      --color-sidebar-primary: var(--sidebar-primary);
+      --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+      --color-sidebar-accent: var(--sidebar-accent);
+      --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+      --color-sidebar-border: var(--sidebar-border);
+      --color-sidebar-ring: var(--sidebar-ring);
+
+      --font-sans: var(--font-sans);
+      --font-mono: var(--font-mono);
+      --font-serif: var(--font-serif);
+
+      --radius-sm: calc(var(--radius) - 4px);
+      --radius-md: calc(var(--radius) - 2px);
+      --radius-lg: var(--radius);
+      --radius-xl: calc(var(--radius) + 4px);
+
+      --shadow-2xs: var(--shadow-2xs);
+      --shadow-xs: var(--shadow-xs);
+      --shadow-sm: var(--shadow-sm);
+      --shadow: var(--shadow);
+      --shadow-md: var(--shadow-md);
+      --shadow-lg: var(--shadow-lg);
+      --shadow-xl: var(--shadow-xl);
+      --shadow-2xl: var(--shadow-2xl);
+    }
+  </style>
+</head>
+<body>
+  <div class="min-h-screen antialiased" style="background: var(--background); color: var(--foreground); font-family: var(--font-sans);">
+    <main class="mx-auto max-w-2xl px-4 py-8">
+      <div class="mb-6">
+        <div class="p-4 mb-4" style="background: var(--accent); color: var(--accent-foreground); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-md);">
+          <p class="text-lg font-medium">Hello and welcome! I'm making a platform to serve games that are command-based and platform agnostic (served over group text, Discord, Twitter, etc.).</p>
+        </div>
+      </div>
+
+      <div class="p-4" style="background: var(--card); color: var(--card-foreground); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-sm);">
+        <h2 class="text-2xl font-bold tracking-tight mb-2">CritterOS</h2>
+        <p>
+          CritterOS is the first game to use this platform. Think multiplayer tamagotchi, where the creatures and interactions are up to the imagination of the player.
+        </p>
+        
+        <div class="mt-4">
+          <a
+            class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-none"
+            style="background: var(--primary); color: var(--primary-foreground); border-radius: var(--radius); box-shadow: var(--shadow);"
+            href="https://discord.gg/9zhXfqNrM3"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Join the CritterOS Discord
+          </a>
+        </div>
+        <p class="mt-3 text-sm" style="color: var(--muted-foreground);">This is running off of a dev server on my laptop, so expect some downtime.</p>
+      </div>
+    </main>
+
+  <!-- Wider container for the critter preview carousel, outside the narrow main column -->
+  <section class="mt-6 mx-auto w-full max-w-6xl px-4" aria-labelledby="activity-heading">
+    <h2 id="activity-heading" class="sr-only">Recent activity</h2>
+    <critteros-carousel></critteros-carousel>
+  </section>
+
+  <!-- VillageOS Introduction -->
+  <div class="mt-8 mx-auto max-w-2xl px-4">
+    <div class="p-4" style="background: var(--card); color: var(--card-foreground); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-sm);">
+      <h2 class="text-2xl font-bold tracking-tight mb-2">VillageOS</h2>
+      <p class="text-base" style="color: var(--muted-foreground);">
+        Built in a single hackathon to demonstrate how the platform can extend beyond CritterOS.
+      </p>
+    </div>
+  </div>
+
+  <!-- Second carousel with secondary theme colors -->
+  <section class="mt-6 mx-auto w-full max-w-6xl px-4" aria-labelledby="secondary-activity-heading">
+    <h2 id="secondary-activity-heading" class="sr-only">Secondary activity</h2>
+    <villageos-carousel></villageos-carousel>
+  </section>
+  
+  <!-- Bottom padding -->
+  <div class="pb-16"></div>
+  </div>
+</body>
+</html>
