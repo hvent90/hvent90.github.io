@@ -31,9 +31,9 @@
     </style>
     
     <!-- Carousel Web Components -->
-    <script src="./components/carousel-component.js"></script>
+    <!-- <script src="./components/carousel-component.js"></script>
     <script src="./components/critteros-carousel.js"></script>
-    <script src="./components/villageos-carousel.js"></script>
+    <script src="./components/villageos-carousel.js"></script> -->
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -195,19 +195,19 @@
                         correspondingProject.classList.add('scroll-active');
                     }
                     
-                    if (projectId === 'critteros') {
-                        const mediaSection = document.querySelector('.media-section.critteros');
-                        mediaSection.innerHTML = `
-                            <h3>CritterOS</h3>
-                            <div class="media-embed">
-                                <critteros-carousel media-path="critteros/media/"></critteros-carousel>
-                            </div>
-                            <h3>VillageOS</h3>
-                            <div class="media-embed">
-                                <villageos-carousel media-path="critteros/media/"></villageos-carousel>
-                            </div>
-                        `;
-                    }
+                    // if (projectId === 'critteros') {
+                    //     const mediaSection = document.querySelector('.media-section.critteros');
+                    //     mediaSection.innerHTML = `
+                    //         <h3>CritterOS</h3>
+                    //         <div class="media-embed">
+                    //             <critteros-carousel media-path="critteros/media/"></critteros-carousel>
+                    //         </div>
+                    //         <h3>VillageOS</h3>
+                    //         <div class="media-embed">
+                    //             <villageos-carousel media-path="critteros/media/"></villageos-carousel>
+                    //         </div>
+                    //     `;
+                    // }
                 }
                 
                 // Update the current active project
@@ -361,7 +361,7 @@
             
             <h2>Projects</h2>
     <ul>
-        <li class="has-media" data-media="critteros">
+        <li data-media="critteros">
             <div class="project-header">
                 <span class="project-title">CritterOS / VillageOS</span>
                 <span class="project-date">2025</span>
@@ -486,7 +486,7 @@
             <h2>Media</h2>
             
             <div class="sidebar-media">
-                <div class="media-section" data-project="critteros">
+                <!-- <div class="media-section" data-project="critteros">
                     <h3>CritterOS</h3>
                     <div class="media-embed">
                         <critteros-carousel media-path="critteros/media/"></critteros-carousel>
@@ -497,7 +497,7 @@
                         <villageos-carousel media-path="critteros/media/"></villageos-carousel>
                     </div>
                 </div>
-                
+                 -->
                 <div class="media-section" data-project="delos">
                     <h3>Delos: Space Traffic Control</h3>
                     <div class="media-embed">
