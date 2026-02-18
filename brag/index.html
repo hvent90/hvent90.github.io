@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Henry Ventura - Portfolio Highlights">
+    <meta name="author" content="Henry Ventura">
+    <title>Henry Ventura</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: #666;
+            font-size: 0.9rem;
+            text-decoration: none;
+            margin-bottom: 20px;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 15px;
+            color: #000;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin: 40px 0 20px 0;
+            color: #000;
+        }
+
+        .contact {
+            margin-bottom: 20px;
+        }
+
+        .contact a {
+            color: #000;
+            text-decoration: none;
+            margin-right: 20px;
+            font-size: 0.95rem;
+        }
+
+        .contact a:hover {
+            text-decoration: underline;
+        }
+
+        ul {
+            list-style: none;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        li:before {
+            content: "\2014";
+            position: absolute;
+            left: 0;
+            color: #666;
+        }
+
+        .project-title {
+            font-weight: 600;
+            color: #000;
+            text-decoration: none;
+            font-size: 1.1rem;
+        }
+
+        .project-title:hover {
+            text-decoration: underline;
+        }
+
+        .project-header {
+            display: flex;
+            align-items: baseline;
+            gap: 0;
+            flex-wrap: wrap;
+            margin-bottom: 6px;
+        }
+
+        .project-header > * {
+            margin-right: 8px;
+        }
+
+        .project-header > *:last-child {
+            margin-right: 0;
+        }
+
+        .project-subtitle {
+            color: #666;
+            font-size: 0.95rem;
+            font-weight: 400;
+        }
+
+        .project-description {
+            margin-top: 4px;
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        .project {
+            margin-bottom: 40px;
+        }
+
+        .project img {
+            width: 100%;
+            border-radius: 8px;
+            margin: 15px 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .project-links {
+            font-size: 0.85rem;
+            margin-top: 8px;
+        }
+
+        .project-links a {
+            color: #fff;
+            text-decoration: none;
+            font-family: "SF Mono", "Fira Code", "Fira Mono", "Roboto Mono", monospace;
+            background: #333;
+            padding: 4px 10px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-right: 6px;
+        }
+
+        .project-links a:hover {
+            background: #555;
+            text-decoration: none;
+        }
+
+        .closing {
+            margin-top: 40px;
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        .work-links {
+            font-size: 0.9rem;
+            margin-top: 8px;
+        }
+
+        .work-links a {
+            color: #000;
+            text-decoration: none;
+        }
+
+        .work-links a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 20px 15px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="https://hventura.com" class="back-link">&larr; Back to full portfolio</a>
+
+    <h1>Henry Ventura</h1>
+
+    <div class="contact">
+        <a href="mailto:me@hventura.com">Email</a>
+        <a href="https://linkedin.com/in/henry-ventura-a6336280/">LinkedIn</a>
+        <a href="https://twitter.com/hvent90">Twitter</a>
+        <a href="https://hventura.com">Website</a>
+    </div>
+
+    <h2>Recent Work</h2>
+
+    <div class="project">
+        <div class="project-header">
+            <a href="https://sazabi.com" class="project-title">Sazabi</a>
+        </div>
+        <p class="project-subtitle">Founding Engineer</p>
+        <ul>
+            <li>Built the core AI agent tooling that transformed the product from a chatbot into a functional observability assistant, enabling it to query production log data in ClickHouse</li>
+            <li>Designed the artifact system for interactive visualizations (tables, charts, log viewers) that made AI outputs grokkable</li>
+            <li>Architected S3-based caching to eliminate redundant database queries and reduce costs</li>
+            <li>Built the evaluation framework and prompt optimization system (GEPA): 13 datasets, multiple evaluator types, LLM-as-judge integration, and automated prompt improvement</li>
+        </ul>
+        <div class="project-links">
+            <a href="https://sazabi.com">website</a><a href="https://twitter.com/sazabi">twitter</a>
+        </div>
+    </div>
+
+    <h2>Recent side projects</h2>
+
+    <div class="project">
+        <div class="project-header">
+            <span class="project-title">LLM Gateway</span>
+        </div>
+        <p class="project-description">An opinionated agent framework built on three core concepts: harnesses yielding events, composable harnesses, and events forming a graph. Features streaming LLM calls across multiple providers, human-in-the-loop approval via relay events, sub-agent orchestration, a client-side immutable graph reducer for conversation rendering, and an <b>RLM</b> harness that gives models a REPL for processing arbitrarily long inputs.</p>
+        <div class="project-links">
+            <a href="https://github.com/hvent90/llm-gateway">github</a>
+        </div>
+    </div>
+
+    <div class="project">
+        <div class="project-header">
+            <span class="project-title">Zen Flow</span>
+        </div>
+        <p class="project-description">A typing web app built in ~20 minutes on the N train using Claude Code for Web. Its main value proposition is allowing for targeted training of individual hands.</p>
+        <div class="project-links">
+            <a href="https://hventura.com/Typing">website</a><a href="https://github.com/hvent90/Typing">github</a>
+        </div>
+        <img src="img/typing-app.png" alt="Zen Flow screenshot">
+    </div>
+
+    <div class="project">
+        <div class="project-header">
+            <span class="project-title">Prism</span>
+        </div>
+        <p class="project-description">Build AST of codebase, create embeddings, use vector search as entry points into the AST and then pathfind between top N matches to find parts of the code within a certain blast radius. Used for providing codebase intelligence in a context-efficient manner to agents.</p>
+        <div class="project-links">
+            <a href="https://github.com/hvent90/prism">github</a>
+        </div>
+        <img src="img/prism.png" alt="Prism screenshot">
+    </div>
+
+    <div class="project">
+        <div class="project-header">
+            <span class="project-title">NetPulse</span>
+        </div>
+        <p class="project-description">Used to monitor my home 5G connection (and served as an excuse to buy a Mac Mini). This let me put together a case that T-Mobile oversubscribed my area. I'll be putting together an FCC violation report using its collected data which will hopefully lead to better service for folks in my area.</p>
+        <div class="project-links">
+            <a href="https://github.com/hvent90/5g-inspector">github</a>
+        </div>
+        <img src="img/netpulse.png" alt="NetPulse screenshot">
+        <img src="img/netpulse-grafana.png" alt="NetPulse Grafana screenshot">
+    </div>
+
+    <div class="project">
+        <div class="project-header">
+            <span class="project-title">Moon Renderer</span>
+        </div>
+        <p class="project-description">Built in C with Raylib, renders an actual planet-sized rocky planet with detail from surface to orbit using a cubic quadtree to generate meshes and cascaded shadow maps. Since learning about shadow maps, I've been wondering if there is a way to translate this concept to a neural net layer &mdash; it deals with translating vectors!</p>
+        <div class="project-links">
+            <a href="https://x.com/hvent90/status/2000426842822787525/video/1">twitter</a><a href="https://github.com/hvent90/moon-renderer">github</a>
+        </div>
+        <img src="img/moon-renderer.png" alt="Moon Renderer screenshot">
+    </div>
+
+    <div class="project">
+        <div class="project-header">
+            <span class="project-title">TL;DReddit</span>
+        </div>
+        <p class="project-description">User sentiment analysis of Reddit threads with thousands of comments. Extracts 5 main themes, supporting/opposing arguments, and cites individual comments for comprehensive thread understanding.</p>
+        <div class="project-links">
+            <a href="https://www.loom.com/share/43ad6edfe4194c6e828fa50581dda4dd">loom</a>
+        </div>
+        <img src="img/tldreddit.png" alt="TL;DReddit screenshot">
+    </div>
+
+
+</body>
+</html>
